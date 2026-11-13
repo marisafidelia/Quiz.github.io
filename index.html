@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Interaktif: Sistem Pernapasan Manusia</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f9ff;
+            background-image: radial-gradient(#bae6fd 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+        .fade-in {
+            animation: fadeIn 0.35s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* Custom scrollbar untuk halaman review hasil */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 8px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 8px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-800 flex flex-col justify-between antialiased selection:bg-teal-200 selection:text-teal-900">
+
+    <!-- Header / Navbar -->
+    <header class="bg-white/90 backdrop-blur-md border-b border-teal-100 sticky top-0 z-20 shadow-sm">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-500 to-cyan-600 flex items-center justify-center text-white shadow-md shadow-teal-500/20">
+                    <!-- SVG Icon Paru-paru / Medis -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2v8"/>
+                        <path d="M12 10c-2 0-4.5-1.5-6-1.5-2.5 0-4 2.5-4 6 0 4 2.5 6.5 5.5 6.5 2 0 3.5-1 4.5-2.5"/>
+                        <path d="M12 10c2 0 4.5-1.5 6-1.5 2.5 0 4 2.5 4 6 0 4-2.5 6.5-5.5 6.5-2 0-3.5-1-4.5-2.5"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="font-bold text-slate-800 text-base sm:text-lg leading-tight">BioQuiz Medis</h1>
+                    <p class="text-xs text-teal-600 font-medium">Sistem Pernapasan Manusia</p>
+                </div>
+            </div>
+
+            <!-- Timer Badge (Muncul saat kuis berlangsung) -->
+            <div id="header-timer" class="hidden items-center gap-2 bg-slate-100 border border-slate-200 px-3.5 py-1.5 rounded-full text-sm font-semibold text-slate-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-teal-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                </svg>
+                <span id="timer-display">00:00</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-grow flex items-center justify-center p-4 sm:p-6">
+        <div class="w-full max-w-3xl">
+
+            <!-- 1. START SCREEN (Halaman Pembuka) -->
+            <section id="start-screen" class="bg-white rounded-3xl shadow-xl shadow-cyan-900/5 border border-teal-100 p-6 sm:p-10 text-center fade-in">
+                <div class="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-tr from-teal-50 to-cyan-100 border border-teal-200 flex items-center justify-center text-teal-600 shadow-inner">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-11 h-11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2v9"/>
+                        <path d="M9.5 11.5 6 14"/>
+                        <path d="M14.5 11.5 18 14"/>
+                        <path d="M12 11c-2.2 0-4.8-2-6.5-2C2.8 9 1.5 11.8 1.5 15.2c0 3.8 2.3 6.3 5.2 6.3 2.3 0 4.1-1.3 5.3-3.2"/>
+                        <path d="M12 11c2.2 0 4.8-2 6.5-2 2.7 0 4 2.8 4 6.2 0 3.8-2.3 6.3-5.2 6.3-2.3 0-4.1-1.3-5.3-3.2"/>
+                    </svg>
+                </div>
+
+                <span class="inline-block px-3.5 py-1 rounded-full bg-teal-50 text-teal-700 text-xs font-bold tracking-wide uppercase mb-3 border border-teal-200">
+                    Evaluasi Biologi & Anatomi
+                </span>
+                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-900 mb-4 tracking-tight">
+                    Kuis Sistem Pernapasan Manusia
+                </h2>
+                <p class="text-slate-600 text-sm sm:text-base max-w-xl mx-auto mb-8 leading-relaxed">
+                    Uji pemahaman Anda mengenai anatomi organ pernapasan, mekanisme inspirasi dan ekspirasi, pertukaran gas, volume udara paru-paru, hingga gangguan sistem respirasi.
+                </p>
+
+                <!-- Info Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-8 text-left">
+                    <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-4 flex items-start gap-3">
+                        <div class="p-2 rounded-lg bg-cyan-100 text-cyan-700 shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-sm">20 Soal Pilihan</h3>
+                            <p class="text-xs text-slate-500 mt-0.5">Opsi A, B, C, dan D terstruktur</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-4 flex items-start gap-3">
+                        <div class="p-2 rounded-lg bg-teal-100 text-teal-700 shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-sm">Pembahasan Instan</h3>
+                            <p class="text-xs text-slate-500 mt-0.5">Koreksi & penjelasan tiap soal</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-4 flex items-start gap-3">
+                        <div class="p-2 rounded-lg bg-sky-100 text-sky-700 shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-sm">Penghitung Waktu</h3>
+                            <p class="text-xs text-slate-500 mt-0.5">Pantau durasi pengerjaan Anda</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Opsi Pengaturan Singkat -->
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
+                    <label class="inline-flex items-center gap-2.5 cursor-pointer bg-teal-50/70 border border-teal-200 px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 hover:bg-teal-50 transition">
+                        <input type="checkbox" id="toggle-timer-opt" checked class="w-4 h-4 accent-teal-600 rounded cursor-pointer">
+                        <span>Aktifkan Penghitung Waktu (Timer)</span>
+                    </label>
+                </div>
+
+                <button id="btn-start" class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-700 hover:to-cyan-700 text-white font-bold text-base sm:text-lg shadow-lg shadow-teal-600/25 hover:shadow-teal-600/40 transition-all transform active:scale-[0.98] inline-flex items-center justify-center gap-2.5 cursor-pointer">
+                    <span>Mulai Kuis Sekarang</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+                    </svg>
+                </button>
+            </section>
+
+            <!-- 2. QUIZ SCREEN (Halaman Pengerjaan Soal) -->
+            <section id="quiz-screen" class="hidden bg-white rounded-3xl shadow-xl shadow-cyan-900/5 border border-teal-100 overflow-hidden fade-in">
+                <!-- Progress Header -->
+                <div class="bg-slate-50/80 border-b border-slate-100 px-6 py-4">
+                    <div class="flex items-center justify-between text-sm font-semibold mb-2.5">
+                        <span id="question-counter" class="text-teal-700 bg-teal-50 border border-teal-200 px-3 py-1 rounded-lg">
+                            Soal 1 dari 20
+                        </span>
+                        <span id="live-score-badge" class="text-slate-500 text-xs sm:text-sm">
+                            Skor Sementara: <strong class="text-slate-800">0</strong>
+                        </span>
+                    </div>
+                    <!-- Visual Progress Bar -->
+                    <div class="w-full h-2.5 bg-slate-200 rounded-full overflow-hidden">
+                        <div id="progress-bar" class="h-full bg-gradient-to-r from-teal-500 to-cyan-500 rounded-full transition-all duration-500 ease-out" style="width: 5%;"></div>
+                    </div>
+                </div>
+
+                <!-- Question Body -->
+                <div class="p-6 sm:p-8">
+                    <!-- Topik Tag -->
+                    <div class="mb-3">
+                        <span id="question-topic" class="text-xs font-semibold uppercase tracking-wider text-cyan-700 bg-cyan-50 px-2.5 py-1 rounded-md">
+                            Anatomi Pernapasan
+                        </span>
+                    </div>
+
+                    <!-- Teks Pertanyaan -->
+                    <h3 id="question-text" class="text-lg sm:text-xl font-bold text-slate-900 leading-snug mb-6">
+                        Memuat pertanyaan...
+                    </h3>
+
+                    <!-- Pilihan Jawaban (A, B, C, D) -->
+                    <div id="options-container" class="space-y-3">
+                        <!-- Diisi secara dinamis oleh JavaScript -->
+                    </div>
+
+                    <!-- Feedback & Pembahasan Box (Muncul setelah user memilih jawaban) -->
+                    <div id="feedback-box" class="hidden mt-6 rounded-2xl p-4 sm:p-5 border transition-all fade-in">
+                        <div class="flex items-start gap-3">
+                            <div id="feedback-icon" class="w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5">
+                                <!-- Icon benar/salah -->
+                            </div>
+                            <div class="flex-1">
+                                <h4 id="feedback-title" class="font-bold text-base mb-1"></h4>
+                                <p id="feedback-explanation" class="text-sm leading-relaxed text-slate-700"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Footer -->
+                    <div class="mt-8 pt-5 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-xs text-slate-400 hidden sm:inline">Pilih salah satu jawaban di atas untuk melihat pembahasan</span>
+                        <button id="btn-next" disabled class="w-full sm:w-auto ml-auto px-6 py-3.5 rounded-xl bg-teal-600 hover:bg-teal-700 disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed text-white font-bold text-sm sm:text-base transition-all inline-flex items-center justify-center gap-2 cursor-pointer shadow-sm">
+                            <span id="btn-next-text">Soal Berikutnya</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="9 18 15 12 9 6"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. RESULT SCREEN (Halaman Hasil & Review) -->
+            <section id="result-screen" class="hidden space-y-6 fade-in">
+                <!-- Score Summary Card -->
+                <div class="bg-white rounded-3xl shadow-xl shadow-cyan-900/5 border border-teal-100 p-6 sm:p-10 text-center">
+                    <span id="result-badge" class="inline-block px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-4">
+                        Predikat
+                    </span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-2">
+                        Hasil Evaluasi Kuis Anda
+                    </h2>
+                    <p id="result-subtitle" class="text-slate-500 text-sm sm:text-base max-w-lg mx-auto mb-8">
+                        Ringkasan pencapaian Anda pada materi Sistem Pernapasan Manusia.
+                    </p>
+
+                    <!-- Lingkaran Skor Utama -->
+                    <div class="relative w-36 h-36 sm:w-44 sm:h-44 mx-auto mb-8 flex flex-col items-center justify-center rounded-full bg-gradient-to-b from-teal-50 to-cyan-50 border-4 border-teal-500 shadow-lg shadow-teal-500/15">
+                        <span class="text-xs font-bold uppercase tracking-widest text-teal-600">Skor Akhir</span>
+                        <span id="final-score" class="text-4xl sm:text-5xl font-extrabold text-slate-900 my-0.5">0</span>
+                        <span class="text-xs font-medium text-slate-500">dari 100</span>
+                    </div>
+
+                    <!-- Statistik Grid -->
+                    <div class="grid grid-cols-3 gap-3 sm:gap-4 max-w-xl mx-auto mb-8">
+                        <div class="bg-emerald-50/80 border border-emerald-200 rounded-2xl p-3.5 sm:p-4">
+                            <div class="text-xs font-semibold text-emerald-700 mb-1">Benar</div>
+                            <div id="stat-correct" class="text-xl sm:text-2xl font-extrabold text-emerald-800">0</div>
+                        </div>
+                        <div class="bg-rose-50/80 border border-rose-200 rounded-2xl p-3.5 sm:p-4">
+                            <div class="text-xs font-semibold text-rose-700 mb-1">Salah</div>
+                            <div id="stat-wrong" class="text-xl sm:text-2xl font-extrabold text-rose-800">0</div>
+                        </div>
+                        <div class="bg-sky-50/80 border border-sky-200 rounded-2xl p-3.5 sm:p-4">
+                            <div class="text-xs font-semibold text-sky-700 mb-1">Waktu</div>
+                            <div id="stat-time" class="text-xl sm:text-2xl font-extrabold text-sky-800">00:00</div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+                        <button id="btn-restart" class="w-full sm:w-auto px-7 py-3.5 rounded-2xl bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-700 hover:to-cyan-700 text-white font-bold text-sm sm:text-base shadow-md shadow-teal-600/20 transition-all inline-flex items-center justify-center gap-2 cursor-pointer">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+                            </svg>
+                            <span>Ulangi Kuis</span>
+                        </button>
+                        <a href="#review-section" class="w-full sm:w-auto px-7 py-3.5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-sm sm:text-base transition-all inline-flex items-center justify-center gap-2">
+                            <span>Lihat Pembahasan Lengkap</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Review Jawaban Lengkap (20 Soal) -->
+                <div id="review-section" class="bg-white rounded-3xl shadow-xl shadow-cyan-900/5 border border-teal-100 p-6 sm:p-8">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-5 mb-6 border-b border-slate-100">
+                        <div>
+                            <h3 class="text-lg sm:text-xl font-bold text-slate-900">Review & Kunci Jawaban (20 Soal)</h3>
+                            <p class="text-xs sm:text-sm text-slate-500">Evaluasi perbandingan jawaban Anda dengan kunci jawaban yang benar.</p>
+                        </div>
+                        <div class="flex items-center gap-2 text-xs font-semibold">
+                            <span class="px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200">Benar</span>
+                            <span class="px-2.5 py-1 rounded-md bg-rose-50 text-rose-700 border border-rose-200">Salah</span>
+                        </div>
+                    </div>
+
+                    <div id="review-list" class="space-y-4">
+                        <!-- Daftar review 20 soal di-render di sini -->
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-5 text-center text-xs text-slate-400">
+        <p>Media Pembelajaran Interaktif Biologi &bull; Sistem Pernapasan Manusia</p>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC & BANK SOAL -->
+    <script>
+        // Bank Soal: 20 Soal Pilihan Berganda Sistem Pernapasan Manusia
+        const quizData = [
+            {
+                topic: "Urutan Saluran Pernapasan",
+                question: "Urutan jalannya udara pernapasan dari luar ke dalam tubuh manusia yang paling tepat adalah...",
+                options: [
+                    "Rongga hidung → faring → laring → trakea → bronkus → bronkiolus → alveolus",
+                    "Rongga hidung → laring → faring → trakea → bronkus → bronkiolus → alveolus",
+                    "Rongga hidung → faring → trakea → laring → bronkus → alveolus → bronkiolus",
+                    "Rongga hidung → trakea → faring → laring → bronkiolus → bronkus → alveolus"
+                ],
+                answer: 0,
+                explanation: "Udara masuk melalui rongga hidung, melewati faring (tekak), masuk ke laring (pangkal tenggorokan), turun ke trakea (batang tenggorokan), bercabang ke bronkus dan bronkiolus, hingga berakhir di alveolus."
+            },
+            {
+                topic: "Anatomi Rongga Hidung",
+                question: "Di dalam rongga hidung udara mengalami tiga proses penting sebelum masuk ke paru-paru, yaitu penyaringan, penghangatan, dan pengaturan kelembapan. Struktur yang berperan menghangatkan udara adalah...",
+                options: [
+                    "Rambut-rambut halus (silia) di rongga hidung",
+                    "Selaput lendir (mukus) pada dinding hidung",
+                    "Kapiler darah dan konka di dalam rongga hidung",
+                    "Tulang rawan hialin penyusun batang hidung"
+                ],
+                answer: 2,
+                explanation: "Konka yang kaya akan pembuluh kapiler darah berfungsi menyamakan suhu udara yang dihirup agar mendekati suhu tubuh, sementara silia menyaring debu dan selaput lendir melembapkan udara."
+            },
+            {
+                topic: "Anatomi Laring & Faring",
+                question: "Katup tulang rawan yang berfungsi menutup pangkal tenggorokan (laring) saat kita menelan makanan agar tidak tersedak disebut...",
+                options: [
+                    "Uvula",
+                    "Epiglotis",
+                    "Glotis",
+                    "Tonsil"
+                ],
+                answer: 1,
+                explanation: "Epiglotis adalah katup elastis di atas laring yang otomatis menutup saluran napas saat proses menelan berlangsung sehingga makanan masuk ke kerongkongan (esofagus)."
+            },
+            {
+                topic: "Anatomi Trakea",
+                question: "Dinding trakea tersusun atas cincin-cincin tulang rawan berbentuk huruf C dan dilapisi epitel bersilia. Fungsi utama cincin tulang rawan tersebut adalah...",
+                options: [
+                    "Menghasilkan suara saat udara melewatinya",
+                    "Mempertahankan saluran trakea agar tetap terbuka dan tidak kempis",
+                    "Mengikat oksigen secara langsung sebelum masuk ke bronkus",
+                    "Mempercepat proses difusi karbon dioksida keluar tubuh"
+                ],
+                answer: 1,
+                explanation: "Cincin tulang rawan hialin menjaga lumen trakea tetap terbuka (paten) meskipun terjadi perubahan tekanan udara saat inspirasi maupun ekspirasi."
+            },
+            {
+                topic: "Anatomi Paru-Paru",
+                question: "Paru-paru manusia dibungkus oleh selaput ganda yang berisi cairan limfa untuk mengurangi gesekan saat paru-paru mengembang dan mengempis. Selaput ini dinamakan...",
+                options: [
+                    "Perikardium",
+                    "Peritoneum",
+                    "Pleura",
+                    "Meninges"
+                ],
+                answer: 2,
+                explanation: "Pleura adalah selaput pembungkus paru-paru yang terdiri atas pleura viseralis (melekat pada paru-paru) dan pleura parietalis (melekat pada dinding rongga dada)."
+            },
+            {
+                topic: "Pertukaran Gas",
+                question: "Proses pertukaran gas oksigen (O₂) dan karbon dioksida (CO₂) antara alveolus dengan pembuluh kapiler darah terjadi melalui mekanisme...",
+                options: [
+                    "Transpor aktif menggunakan energi ATP",
+                    "Osmosis melintasi membran semipermeabel",
+                    "Difusi sederhana berdasarkan perbedaan tekanan parsial gas",
+                    "Endositosis oleh sel-sel epitel alveolus"
+                ],
+                answer: 2,
+                explanation: "Pertukaran gas di alveolus berlangsung secara difusi sederhana, yaitu perpindahan gas dari area bertekanan parsial tinggi ke area bertekanan parsial rendah tanpa memerlukan energi."
+            },
+            {
+                topic: "Adaptasi Alveolus",
+                question: "Berikut ini yang BUKAN merupakan ciri adaptasi alveolus untuk memaksimalkan pertukaran gas adalah...",
+                options: [
+                    "Dindingnya sangat tipis (tersusun atas satu lapis sel epitel pipih)",
+                    "Permukaannya selalu lembap oleh lapisan cairan tipis",
+                    "Dikelilingi oleh jaringan pembuluh kapiler darah yang sangat padat",
+                    "Memiliki dinding otot polos yang tebal untuk memompa udara"
+                ],
+                answer: 3,
+                explanation: "Alveolus tidak memiliki dinding otot polos yang tebal; justru dindingnya sangat tipis (satu lapis sel) agar jarak difusi gas O₂ dan CO₂ sangat pendek dan cepat."
+            },
+            {
+                topic: "Mekanisme Pernapasan Dada",
+                question: "Pada mekanisme pernapasan dada, fase inspirasi terjadi apabila...",
+                options: [
+                    "Otot antartulang rusuk luar berkontraksi → tulang rusuk terangkat → volume rongga dada membesar → tekanan udara paru-paru mengecil",
+                    "Otot antartulang rusuk dalam berelaksasi → tulang rusuk turun → volume rongga dada mengecil → tekanan udara paru-paru membesar",
+                    "Otot diafragma berkontraksi → diafragma mendatar → volume rongga dada mengecil → udara masuk",
+                    "Otot antartulang rusuk luar berelaksasi → tulang rusuk terangkat → tekanan udara paru-paru membesar"
+                ],
+                answer: 0,
+                explanation: "Kontraksi otot antartulang rusuk luar (muskulus interkostalis eksternus) mengangkat tulang rusuk ke atas dan ke luar, memperbesar volume rongga dada sehingga tekanan intrapulmonal turun di bawah tekanan atmosfer dan udara masuk."
+            },
+            {
+                topic: "Mekanisme Pernapasan Perut",
+                question: "Saat melakukan pernapasan perut, posisi otot diafragma pada fase ekspirasi adalah...",
+                options: [
+                    "Berkontraksi dan posisinya mendatar",
+                    "Berkontraksi dan melengkung ke bawah",
+                    "Berelaksasi dan melengkung kembali ke atas (kubah)",
+                    "Berelaksasi dan posisinya mendatar sejajar tulang rusuk"
+                ],
+                answer: 2,
+                explanation: "Pada fase ekspirasi pernapasan perut, otot diafragma berelaksasi sehingga kembali melengkung ke atas seperti kubah, mengecilkan volume rongga dada dan mendorong udara keluar."
+            },
+            {
+                topic: "Pengangkutan Gas dalam Darah",
+                question: "Sebagian besar oksigen (sekitar 97–98,5%) di dalam darah diangkut menuju jaringan tubuh dalam bentuk...",
+                options: [
+                    "Larut secara fisik di dalam plasma darah",
+                    "Oksihemoglobin (HbO₂) di dalam sel darah merah",
+                    "Ion bikarbonat (HCO₃⁻) di dalam plasma darah",
+                    "Karbominohemoglobin (HbCO₂) di dalam leukosit"
+                ],
+                answer: 1,
+                explanation: "Oksigen berikatan dengan atom besi (Fe²⁺) pada gugus heme hemoglobin di dalam eritrosit membentuk oksihemoglobin (HbO₂)."
+            },
+            {
+                topic: "Pengangkutan Karbon Dioksida",
+                question: "Sebagian besar gas karbon dioksida (CO₂) hasil metabolisme sel diangkut oleh darah menuju paru-paru dalam bentuk...",
+                options: [
+                    "Karboksihemoglobin (HbCO)",
+                    "Gas CO₂ bebas yang terlarut dalam plasma",
+                    "Ion bikarbonat (HCO₃⁻) hasil reaksi dengan air dibantu enzim karbonat anhidrase",
+                    "Oksihemoglobin di dalam keping darah"
+                ],
+                answer: 2,
+                explanation: "Sekitar 70% CO₂ bereaksi dengan H₂O di dalam eritrosit membentuk asam karbonat (H₂CO₃) dengan bantuan enzim karbonat anhidrase, lalu terurai menjadi ion H⁺ dan ion bikarbonat (HCO₃⁻)."
+            },
+            {
+                topic: "Volume Udara Pernapasan",
+                question: "Volume udara yang keluar dan masuk paru-paru secara normal saat tubuh dalam keadaan istirahat (sekitar 500 mL pada orang dewasa) disebut...",
+                options: [
+                    "Volume cadangan inspirasi",
+                    "Volume tidal",
+                    "Volume residu",
+                    "Kapasitas vital paru-paru"
+                ],
+                answer: 1,
+                explanation: "Volume tidal (TV) adalah volume udara pernapasan biasa saat inspirasi dan ekspirasi normal tanpa paksaan, besarnya rata-rata 500 mL."
+            },
+            {
+                topic: "Kapasitas Paru-Paru",
+                question: "Kapasitas vital paru-paru merupakan jumlah maksimum udara yang dapat dikeluarkan seseorang setelah melakukan inspirasi sekuat-kuatnya. Rumus kapasitas vital paru-paru adalah...",
+                options: [
+                    "Volume tidal + Volume residu",
+                    "Volume tidal + Volume cadangan inspirasi + Volume cadangan ekspirasi",
+                    "Volume cadangan inspirasi + Volume residu",
+                    "Kapasitas total paru-paru + Volume tidal"
+                ],
+                answer: 1,
+                explanation: "Kapasitas vital (VC) = Volume Tidal (TV) + Volume Cadangan Inspirasi (IRV) + Volume Cadangan Ekspirasi (ERV), yang totalnya berkisar 3.500–4.500 mL."
+            },
+            {
+                topic: "Volume Residu",
+                question: "Setelah kita menghembuskan napas sekuat-kuatnya, masih terdapat sejumlah udara (sekitar 1.000–1.200 mL) yang tetap tertinggal di dalam paru-paru agar alveolus tidak kolaps. Udara ini disebut...",
+                options: [
+                    "Udara komplementer",
+                    "Udara suplementer",
+                    "Udara residu",
+                    "Kapasitas inspirasi"
+                ],
+                answer: 2,
+                explanation: "Volume residu (RV) adalah udara sisa yang selalu berada di dalam paru-paru dan tidak dapat dikeluarkan bahkan dengan ekspirasi paksa sekalipun."
+            },
+            {
+                topic: "Regulasi Pernapasan",
+                question: "Pusat pengendali utama irama pernapasan otomatis pada sistem saraf manusia terletak di...",
+                options: [
+                    "Serebelum (otak kecil) dan hipotalamus",
+                    "Medula oblongata dan pons varoli pada batang otak",
+                    "Lobus frontalis serebrum (otak besar)",
+                    "Sumsum tulang belakang bagian lumbal"
+                ],
+                answer: 1,
+                explanation: "Medula oblongata dan pons di batang otak mengatur ritme dasar pernapasan serta merespons perubahan kadar CO₂ dan pH darah melalui kemoreseptor."
+            },
+            {
+                topic: "Frekuensi Pernapasan",
+                question: "Faktor yang menyebabkan frekuensi pernapasan seseorang meningkat secara signifikan saat berolahraga berat adalah...",
+                options: [
+                    "Menurunnya suhu tubuh dan berkurangnya kadar CO₂ darah",
+                    "Meningkatnya kadar CO₂ dan ion H⁺ (penurunan pH darah) akibat metabolisme otot",
+                    "Meningkatnya tekanan udara atmosfer di sekitar tubuh",
+                    "Menurunnya kebutuhan energi ATP pada jaringan otot"
+                ],
+                answer: 1,
+                explanation: "Aktivitas otot meningkatkan produksi CO₂ yang menurunkan pH darah. Kemoreseptor mendeteksi kenaikan CO₂/H⁺ dan memicu medula oblongata mempercepat laju napas."
+            },
+            {
+                topic: "Gangguan Sistem Pernapasan",
+                question: "Penyempitan saluran pernapasan (bronkus dan bronkiolus) yang bersifat sementara akibat hipersensitivitas terhadap alergen seperti debu, serbuk sari, atau udara dingin disebut...",
+                options: [
+                    "Emfisema",
+                    "Asma bronkiale",
+                    "Pneumonia",
+                    "Tuberkulosis (TBC)"
+                ],
+                answer: 1,
+                explanation: "Asma ditandai oleh bronkospasme (kontraksi otot polos bronkiolus), peradangan mukosa, dan produksi lendir berlebih yang memicu mengi dan sesak napas."
+            },
+            {
+                topic: "Gangguan Sistem Pernapasan",
+                question: "Penyakit paru-paru kronis yang umumnya disebabkan oleh kebiasaan merokok jangka panjang, di mana dinding alveolus mengalami kerusakan dan kehilangan elastisitasnya sehingga luas permukaan difusi berkurang drastis disebut...",
+                options: [
+                    "Emfisema",
+                    "Sinusitis",
+                    "Laringitis",
+                    "Pleuritis"
+                ],
+                answer: 0,
+                explanation: "Pada emfisema, septa (sekat) antaralveolus hancur sehingga terbentuk kantong udara besar yang tidak efisien dalam pertukaran gas."
+            },
+            {
+                topic: "Penyakit Infeksi Respirasi",
+                question: "Peradangan pada jaringan parenkim paru-paru dan alveolus akibat infeksi bakteri (seperti Streptococcus pneumoniae) atau virus yang menyebabkan kantong alveolus terisi cairan atau nanah disebut...",
+                options: [
+                    "Asfiksi",
+                    "Pneumonia",
+                    "Rinitis",
+                    "Faringitis"
+                ],
+                answer: 1,
+                explanation: "Pneumonia menyebabkan eksudat (cairan radang) menumpuk di dalam alveolus sehingga menghambat difusi oksigen ke dalam darah."
+            },
+            {
+                topic: "Gangguan Pengangkutan Oksigen",
+                question: "Keracunan gas karbon monoksida (CO) dari asap kendaraan bermotor di ruang tertutup sangat berbahaya dan dapat berakibat fatal karena...",
+                options: [
+                    "Gas CO merusak silia trakea secara permanen dalam hitungan detik",
+                    "Afinitas hemoglobin terhadap gas CO sekitar 200 kali lebih kuat dibandingkan terhadap oksigen (O₂)",
+                    "Gas CO membekukan plasma darah di dalam pembuluh kapiler alveolus",
+                    "Gas CO memicu kontraksi diafragma secara terus-menerus"
+                ],
+                answer: 1,
+                explanation: "CO berikatan sangat kuat dengan hemoglobin membentuk karboksihemoglobin (HbCO), sehingga hemoglobin tidak mampu mengikat dan menyalurkan oksigen ke jaringan tubuh (hipoksia jaringan)."
+            }
+        ];
+
+        // State Aplikasi
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let userAnswers = []; // Menyimpan indeks pilihan user untuk setiap soal
+        let isAnswered = false;
+        let useTimer = true;
+        let timerInterval = null;
+        let secondsElapsed = 0;
+
+        // Referensi Elemen DOM
+        const startScreen = document.getElementById('start-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultScreen = document.getElementById('result-screen');
+
+        const headerTimer = document.getElementById('header-timer');
+        const timerDisplay = document.getElementById('timer-display');
+        const toggleTimerOpt = document.getElementById('toggle-timer-opt');
+
+        const btnStart = document.getElementById('btn-start');
+        const btnNext = document.getElementById('btn-next');
+        const btnNextText = document.getElementById('btn-next-text');
+        const btnRestart = document.getElementById('btn-restart');
+
+        const questionCounter = document.getElementById('question-counter');
+        const liveScoreBadge = document.getElementById('live-score-badge');
+        const progressBar = document.getElementById('progress-bar');
+        const questionTopic = document.getElementById('question-topic');
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+
+        const feedbackBox = document.getElementById('feedback-box');
+        const feedbackIcon = document.getElementById('feedback-icon');
+        const feedbackTitle = document.getElementById('feedback-title');
+        const feedbackExplanation = document.getElementById('feedback-explanation');
+
+        // Format Waktu (MM:SS)
+        function formatTime(totalSeconds) {
+            const mins = Math.floor(totalSeconds / 60);
+            const secs = totalSeconds % 60;
+            return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        }
+
+        // Mulai Timer
+        function startTimer() {
+            secondsElapsed = 0;
+            timerDisplay.textContent = "00:00";
+            if (useTimer) {
+                headerTimer.classList.remove('hidden');
+                headerTimer.classList.add('flex');
+            } else {
+                headerTimer.classList.add('hidden');
+                headerTimer.classList.remove('flex');
+            }
+
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                secondsElapsed++;
+                if (useTimer) {
+                    timerDisplay.textContent = formatTime(secondsElapsed);
+                }
+            }, 1000);
+        }
+
+        // Hentikan Timer
+        function stopTimer() {
+            clearInterval(timerInterval);
+        }
+
+        // Mulai Kuis
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            userAnswers = [];
+            isAnswered = false;
+            useTimer = toggleTimerOpt.checked;
+
+            startScreen.classList.add('hidden');
+            resultScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+
+            startTimer();
+            renderQuestion();
+        }
+
+        // Render Soal Saat Ini
+        function renderQuestion() {
+            isAnswered = false;
+            const currentData = quizData[currentQuestionIndex];
+            const totalQuestions = quizData.length;
+
+            // Update Header & Progress Bar
+            questionCounter.textContent = `Soal ${currentQuestionIndex + 1} dari ${totalQuestions}`;
+            liveScoreBadge.innerHTML = `Skor Sementara: <strong class="text-slate-800">${score * 5}</strong>`;
+            const progressPercent = ((currentQuestionIndex + 1) / totalQuestions) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+
+            // Update Konten Soal
+            questionTopic.textContent = currentData.topic;
+            questionText.textContent = `${currentQuestionIndex + 1}. ${currentData.question}`;
+
+            // Reset Feedback & Tombol Lanjut
+            feedbackBox.classList.add('hidden');
+            btnNext.disabled = true;
+            btnNextText.textContent = (currentQuestionIndex === totalQuestions - 1) ? "Lihat Hasil Akhir" : "Soal Berikutnya";
+
+            // Render Opsi A, B, C, D
+            optionsContainer.innerHTML = '';
+            const optionLabels = ['A', 'B', 'C', 'D'];
+
+            currentData.options.forEach((optionText, index) => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = "option-btn w-full text-left p-4 rounded-2xl border-2 border-slate-200 bg-white hover:border-teal-400 hover:bg-teal-50/40 transition-all flex items-start gap-3.5 group cursor-pointer";
+                button.dataset.index = index;
+
+                button.innerHTML = `
+                    <span class="option-badge w-8 h-8 rounded-xl bg-slate-100 group-hover:bg-teal-100 group-hover:text-teal-700 text-slate-700 font-bold text-sm flex items-center justify-center shrink-0 transition-colors">
+                        ${optionLabels[index]}
+                    </span>
+                    <span class="option-label text-sm sm:text-base text-slate-700 font-medium pt-1 leading-snug">
+                        ${optionText}
+                    </span>
+                `;
+
+                button.addEventListener('click', () => handleSelectOption(index));
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        // Tangani Pemilihan Jawaban
+        function handleSelectOption(selectedIndex) {
+            if (isAnswered) return;
+            isAnswered = true;
+
+            const currentData = quizData[currentQuestionIndex];
+            const correctIndex = currentData.answer;
+            const isCorrect = (selectedIndex === correctIndex);
+
+            // Simpan jawaban user
+            userAnswers.push(selectedIndex);
+
+            if (isCorrect) {
+                score++;
+                liveScoreBadge.innerHTML = `Skor Sementara: <strong class="text-teal-700">${score * 5}</strong>`;
+            }
+
+            // Update Tampilan Semua Tombol Opsi
+            const optionButtons = optionsContainer.querySelectorAll('.option-btn');
+            optionButtons.forEach((btn, idx) => {
+                btn.disabled = true;
+                btn.classList.remove('hover:border-teal-400', 'hover:bg-teal-50/40', 'cursor-pointer');
+                btn.classList.add('cursor-default');
+
+                const badge = btn.querySelector('.option-badge');
+                const label = btn.querySelector('.option-label');
+
+                if (idx === correctIndex) {
+                    // Tandai Jawaban Benar (Hijau)
+                    btn.classList.remove('border-slate-200', 'bg-white');
+                    btn.classList.add('border-emerald-500', 'bg-emerald-50/80');
+                    badge.classList.remove('bg-slate-100', 'text-slate-700');
+                    badge.classList.add('bg-emerald-600', 'text-white');
+                    label.classList.add('text-emerald-950', 'font-semibold');
+                } else if (idx === selectedIndex && !isCorrect) {
+                    // Tandai Jawaban User yang Salah (Merah)
+                    btn.classList.remove('border-slate-200', 'bg-white');
+                    btn.classList.add('border-rose-500', 'bg-rose-50/80');
+                    badge.classList.remove('bg-slate-100', 'text-slate-700');
+                    badge.classList.add('bg-rose-600', 'text-white');
+                    label.classList.add('text-rose-950', 'font-semibold');
+                } else {
+                    // Opsi lainnya sedikit diredupkan
+                    btn.classList.add('opacity-60');
+                }
+            });
+
+            // Tampilkan Kotak Umpan Balik & Pembahasan Instan
+            feedbackBox.classList.remove('hidden', 'bg-emerald-50', 'border-emerald-200', 'bg-rose-50', 'border-rose-200');
+            feedbackIcon.classList.remove('bg-emerald-600', 'bg-rose-600', 'text-white');
+
+            if (isCorrect) {
+                feedbackBox.classList.add('bg-emerald-50', 'border-emerald-200');
+                feedbackIcon.classList.add('bg-emerald-600', 'text-white');
+                feedbackIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`;
+                feedbackTitle.textContent = "Jawaban Anda Benar!";
+                feedbackTitle.className = "font-bold text-base mb-1 text-emerald-800";
+            } else {
+                const optionLabels = ['A', 'B', 'C', 'D'];
+                feedbackBox.classList.add('bg-rose-50', 'border-rose-200');
+                feedbackIcon.classList.add('bg-rose-600', 'text-white');
+                feedbackIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+                feedbackTitle.textContent = `Kurang Tepat! Kunci Jawaban: ${optionLabels[correctIndex]}`;
+                feedbackTitle.className = "font-bold text-base mb-1 text-rose-800";
+            }
+
+            feedbackExplanation.textContent = currentData.explanation;
+
+            // Aktifkan tombol soal berikutnya
+            btnNext.disabled = false;
+        }
+
+        // Lanjut ke Soal Berikutnya atau Selesai
+        function handleNextQuestion() {
+            if (currentQuestionIndex < quizData.length - 1) {
+                currentQuestionIndex++;
+                renderQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        // Tampilkan Halaman Hasil Akhir & Review
+        function showResults() {
+            stopTimer();
+            headerTimer.classList.add('hidden');
+            headerTimer.classList.remove('flex');
+
+            quizScreen.classList.add('hidden');
+            resultScreen.classList.remove('hidden');
+
+            const totalQuestions = quizData.length;
+            const finalScoreValue = Math.round((score / totalQuestions) * 100);
+            const wrongCount = totalQuestions - score;
+
+            // Update Angka Statistik
+            document.getElementById('final-score').textContent = finalScoreValue;
+            document.getElementById('stat-correct').textContent = `${score} Soal`;
+            document.getElementById('stat-wrong').textContent = `${wrongCount} Soal`;
+            document.getElementById('stat-time').textContent = formatTime(secondsElapsed);
+
+            // Tentukan Kategori Predikat
+            const resultBadge = document.getElementById('result-badge');
+            const resultSubtitle = document.getElementById('result-subtitle');
+
+            resultBadge.className = "inline-block px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-4 border ";
+
+            if (finalScoreValue >= 85) {
+                resultBadge.textContent = "Predikat: Sangat Baik (Istimewa)";
+                resultBadge.classList.add('bg-emerald-50', 'text-emerald-700', 'border-emerald-200');
+                resultSubtitle.textContent = "Luar biasa! Pemahaman Anda mengenai anatomi dan fisiologi sistem pernapasan manusia sangat matang.";
+            } else if (finalScoreValue >= 70) {
+                resultBadge.textContent = "Predikat: Baik";
+                resultBadge.classList.add('bg-teal-50', 'text-teal-700', 'border-teal-200');
+                resultSubtitle.textContent = "Bagus! Anda sudah menguasai sebagian besar konsep sistem pernapasan dengan baik.";
+            } else if (finalScoreValue >= 55) {
+                resultBadge.textContent = "Predikat: Cukup";
+                resultBadge.classList.add('bg-amber-50', 'text-amber-700', 'border-amber-200');
+                resultSubtitle.textContent = "Cukup baik, namun beberapa konsep mekanisme pernapasan dan gangguan respirasi masih perlu diperdalam.";
+            } else {
+                resultBadge.textContent = "Predikat: Perlu Belajar Lagi";
+                resultBadge.classList.add('bg-rose-50', 'text-rose-700', 'border-rose-200');
+                resultSubtitle.textContent = "Jangan menyerah! Silakan pelajari kembali pembahasan di bawah ini lalu ulangi kuis untuk meningkatkan skor Anda.";
+            }
+
+            // Render Daftar Review 20 Soal
+            const reviewList = document.getElementById('review-list');
+            reviewList.innerHTML = '';
+            const optionLabels = ['A', 'B', 'C', 'D'];
+
+            quizData.forEach((item, index) => {
+                const userChoice = userAnswers[index];
+                const isUserCorrect = (userChoice === item.answer);
+
+                const card = document.createElement('div');
+                card.className = `p-4 sm:p-5 rounded-2xl border ${isUserCorrect ? 'border-emerald-200 bg-emerald-50/30' : 'border-rose-200 bg-rose-50/30'}`;
+
+                card.innerHTML = `
+                    <div class="flex items-start justify-between gap-3 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Soal #${index + 1} &bull; ${item.topic}</span>
+                        <span class="px-2.5 py-0.5 rounded-full text-xs font-bold shrink-0 ${isUserCorrect ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">
+                            ${isUserCorrect ? '✓ Benar' : '✕ Salah'}
+                        </span>
+                    </div>
+                    <p class="font-bold text-slate-900 text-sm sm:text-base mb-3">${item.question}</p>
+                    <div class="space-y-1.5 text-xs sm:text-sm mb-3">
+                        <div class="flex items-start gap-2">
+                            <span class="font-semibold text-slate-600 min-w-[115px]">Jawaban Anda:</span>
+                            <span class="font-bold ${isUserCorrect ? 'text-emerald-700' : 'text-rose-700'}">
+                                ${optionLabels[userChoice]}. ${item.options[userChoice]}
+                            </span>
+                        </div>
+                        ${!isUserCorrect ? `
+                        <div class="flex items-start gap-2">
+                            <span class="font-semibold text-slate-600 min-w-[115px]">Kunci Jawaban:</span>
+                            <span class="font-bold text-emerald-700">
+                                ${optionLabels[item.answer]}. ${item.options[item.answer]}
+                            </span>
+                        </div>
+                        ` : ''}
+                    </div>
+                    <div class="bg-white/90 border border-slate-200/80 rounded-xl p-3 text-xs sm:text-sm text-slate-600 leading-relaxed">
+                        <strong class="text-teal-700">Pembahasan:</strong> ${item.explanation}
+                    </div>
+                `;
+
+                reviewList.appendChild(card);
+            });
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Event Listeners
+        btnStart.addEventListener('click', startQuiz);
+        btnNext.addEventListener('click', handleNextQuestion);
+        btnRestart.addEventListener('click', () => {
+            resultScreen.classList.add('hidden');
+            startScreen.classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>
